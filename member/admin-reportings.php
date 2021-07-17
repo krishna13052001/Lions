@@ -1,0 +1,371 @@
+
+
+<?php
+include './../creds.php';
+include './../upload-image.php';
+session_start();
+$con = mysqli_connect($host, $user, $pass, $dbname);
+if (!isset($_SESSION['id'])) {
+    header("Location: ./../login.php");
+} else {
+    $id = $_SESSION['id'];
+    $user = "SELECT * FROM `users` WHERE `id` = '$id'";
+    $user = mysqli_query($con, $user);
+    $user = mysqli_fetch_array($user);
+    $clubId = $user['clubId'];
+    $member = $user['title'];
+    $clubDetail = "SELECT * FROM `clubs` WHERE `clubId` = '$clubId'";
+    $clubDetail = mysqli_query($con, $clubDetail);
+    $clubDetail = mysqli_fetch_assoc($clubDetail);
+
+    $prevStars = (int)$clubDetail['stars'];
+    if (isset($_GET['month'])) {
+        $month = $_GET['month'];
+        $month = $con->real_escape_string(strip_tags($month));
+
+        $submittedReports = $con->query("SELECT * FROM `updated-reports`, `reports` WHERE `updated-reports`.`clubId` = '$clubId' AND `updated-reports`.`month` = '$month' AND `updated-reports`.`reportId` = `reports`.`id` AND `reports`.`month` = '$month'");
+
+        if ($clubDetail["month-" . $month] == '1' || $currentMonth - $month > 1 || $currentMonth - $month < 0) {
+            $updated = false;
+        } else {
+            $updated = false;
+        }
+
+        $reports = mysqli_query($con, "SELECT * FROM `reports` WHERE `month` = '$month'");
+    } else if (isset($_POST['update-report'])) {
+        $month = $_POST['month'];
+        $month = $con->real_escape_string(strip_tags($month));
+        $sql1 = "UPDATE `clubs` SET `month-" . $month . "`='1',`last-updated`='$date' WHERE `clubId` = '$clubId'";
+        mysqli_query($con, $sql1);
+        foreach ($_FILES["image"]["tmp_name"] as $key => $tmp_name) {
+            $file_name = rand(1000, 10000) . '-' . basename($_FILES["image"]["name"][$key]);
+            $imageUploadPath = './../' . $uploadPath . $file_name;
+
+            $ext = pathinfo($file_name, PATHINFO_EXTENSION);
+
+            if (in_array(strtolower($ext), $allowTypes)) {
+                $file_tmp = $_FILES["image"]["tmp_name"][$key];
+                $compressedImage = compressImage($file_tmp, $imageUploadPath, 50);
+                $addImageSql = "INSERT INTO `admin-images`(`img`, `clubId`, `month`) VALUES ('$compressedImage', '$clubId', '$month')";
+                if (mysqli_query($con, $addImageSql)) {
+                    $status = 'success';
+                }
+            } else {
+                array_push($error, "$file_name, ");
+            }
+        }
+        foreach ($_POST['report-item'] as $check) {
+            $myData = explode("*", $check);
+            $multiplier = (int)$myData[1];
+            $reportId = $myData[0];
+            if (mysqli_query($con, "INSERT INTO `updated-reports`(`reportId`, `clubId`, `month`, `multiplier`) VALUES ('$reportId', '$clubId', '$month', '$multiplier')")) {
+                $sql = mysqli_query($con, "SELECT * FROM `reports` WHERE `id` = $reportId");
+                $sql = mysqli_fetch_assoc($sql);
+                $prevStars += $multiplier * (int)$sql['stars'];
+                mysqli_query($con, "UPDATE `clubs` SET `stars` = '$prevStars' WHERE `clubId` = '$clubId'");
+            }
+        }
+        header("Location: ./admin-reportings.php");
+    } else {
+        header("Location: ./admin-reportings.php?month=" . $currentMonth);
+    }
+}
+mysqli_close($con);
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <?php
+    include './meta.php';
+    ?>
+    <title>Treasurer Home | 3234D2</title> <!-- General CSS Files -->
+    <link rel="stylesheet" href="../assets/css/app.min.css">
+    <link rel="stylesheet" href="../assets/bundles/chocolat/dist/css/chocolat.css">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <!-- Custom style CSS -->
+    <link rel="stylesheet" href="../assets/css/custom.css">
+    <link rel='shortcut icon' type='image/x-icon' href='../assets/img/favicon.ico' />
+    <link rel="stylesheet" href="./../bootstrap-4.1.3-dist/css/bootstrap.min.css" />
+    <!-- <script src="./../bootstrap-4.1.3-dist/js/jquery-3.3.1.min.js"></script>
+<script src="./../bootstrap-4.1.3-dist/js/bootstrap.min.js"></script>
+<script src="./../bootstrap-4.1.3-dist/js/multislider.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="./style.css" /> -->
+
+</head>
+
+
+<?php //include './header.php' 
+?>
+
+<body>
+
+
+    <div class="loader"></div>
+    <div id="app">
+        <div class="main-wrapper main-wrapper-1">
+            <div class="navbar-bg"></div>
+            <nav class="navbar navbar-expand-lg main-navbar sticky">
+                <div class="form-inline mr-auto">
+                    <ul class="navbar-nav mr-3">
+                        <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg
+									collapse-btn"> <i data-feather="align-justify"></i></a></li>
+                        <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                                <i data-feather="maximize"></i>
+                            </a></li>
+                        
+                    </ul>
+                </div>
+                <ul class="navbar-nav navbar-right">
+
+                    <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="../assets/img/user.png" class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
+                        <div class="dropdown-menu dropdown-menu-right pullDown">
+                            <div class="dropdown-title"><?php echo $user['title'] . ' <br><em>"' . $user['firstName'] . ' ' . $user['middleName'] . ' ' . $user['lastName'] . '"</em>' ?></div>
+                            <hr>
+
+                            <a href="./member-login.php" class="dropdown-item has-icon"> <i class="far
+										fa-user"></i>Update Profile</a>
+
+                            <a href="./reset.php" class="dropdown-item has-icon"> <i class="fas fa-cog"></i>
+                                Change Password
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+                            <a href="./logout.php" class="dropdown-item has-icon text-danger"> <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- side bar -->
+            <?php 
+                $msg = "";
+                if($member === "lion member") { 
+                $msg = "Lion Member";
+                include './member-sidebar.php';
+                } elseif($member === "Club Treasurer") {
+                $msg ="Club Treasurer";
+                include './clubtreasurer-sidebar.php';
+                } elseif($member === "Club Secretary") {
+                $msg ="Club Secretary";
+                include './clubsecretary-sidebar.php';
+                } else {
+                $msg ="Club President";
+                include './clubpresident-sidebar.php';
+                }
+            ?>
+                
+
+            <div class="main-content">
+                <section class="section">
+
+
+                <?php if ($user['verified'] == 0) {
+            echo '<h1 class="text-center">Your Profile isn\'t updated!</h1>';
+        } ?>
+        <h2 class="">Admin Reporting</h2>
+        <?php
+        $power = TRUE;
+        /*if (
+            strpos(strtolower($user['title']), 'president') !== false ||
+            strpos(strtolower($user['title']), 'club president') !== false ||
+            strpos(strtolower($user['title']), 'club secretary') !== false ||
+            strpos(strtolower($user['title']), 'secretary') !== false ||
+            strpos(strtolower($user['title']), 'district governor') !== false ||
+            strpos(strtolower($user['title']), 'cabinet secretary') !== false ||
+            strpos(strtolower($user['title']), 'cabinet treasurer') !== false ||
+            strpos(strtolower($user['title']), 'club treasurer') !== false
+        ) {
+            $power = true;
+        } else {
+            echo '<h2 class="text-center">You can\'t access this feature!</h2>';
+            $power = false;
+        } */
+        ?> 
+        <hr>
+<div class="row">
+<div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h4>Total Admin Points</h4>
+                  </div>
+                  <div class="card-body">
+                    <h3><?= $prevStars . " " ?><i class="fa fa-star" style="color: gold"></i>
+            &nbsp;</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h4>Total Activity Points</h4>
+                  </div>
+                  <div class="card-body">
+                    <h3><?= $clubDetail['activityStar'] . " " ?><i class="fa fa-star" style="color: orange">
+                    </i></h3>
+                  </div>
+                </div>
+              </div>
+</div>
+
+
+
+        <?php if (!$power) : ?>
+            <script>
+                alert("You Can't use this feature!")
+                window.location.href = "./home.php";
+            </script>
+        <?php endif ?>
+        <?php if (!$updated) : ?>
+            <form action="./admin-reportings.php" method="post" class="form-group" id="form" enctype="multipart/form-data">
+                <select name="month" id="month" class="form-control">
+                    <option value="" disabled selected>Select Month</option>
+                    <option value="7">July 2020</option>
+                    <option value="8">August 2020</option>
+                    <option value="9">September 2020</option>
+                    <option value="10">October 2020</option>
+                    <option value="11">November 2020</option>
+                    <option value="12">December 2020</option>
+                    <option value="1">January 2021</option>
+                    <option value="2">February 2021</option>
+                    <option value="3">March 2021</option>
+                    <option value="4">April 2021</option>
+                    <option value="5">May 2021</option>
+                    <option value="6">June 2021</option>
+                </select>
+                <br>
+                <ul class="list-group">
+                    <?php while ($row = mysqli_fetch_assoc($reports)) : ?>
+                        <li class="list-group-item add-report">
+                            <?= $row['title'] . " " ?>
+                            <?php if ($row['multiple'] == 1) : ?>
+                                <input type="number" name="" id="" placeholder="Enter Multiple" value="1" class="multiple-check" style="width: 3rem; margin:auto 1rem;" min="1">
+                            <?php endif; ?>
+                            <input type="checkbox" name="report-item[]" id="report-item" data-multiple="<?= $row['multiple'] ?>" value="<?= $row['id'] ?>*1" style="float: right;" class="check-box">
+                        </li>
+                    <?php endwhile; ?>
+                </ul>
+                <br>
+                <span>Upload Report Proof (max. 3 photos)</span>
+                <input type="file" name="image[]" id="" multiple accept="image/*" required class="form-control"><br>
+                <?php
+                if ($power) {
+                    echo '<input type="submit" class="btn btn-success" value="Report" name="update-report" />';
+                }
+                ?>
+            </form>
+        <?php endif; ?>
+        <?php if ($updated) : ?>
+            <select name="month" id="month" class="form-control">
+                <option value="" disabled selected>Select Month</option>
+                <option value="7">July 2020</option>
+                <option value="8">August 2020</option>
+                <option value="9">September 2020</option>
+                <option value="10">October 2020</option>
+                <option value="11">November 2020</option>
+                <option value="12">December 2020</option>
+                <option value="1">January 2021</option>
+                <option value="2">February 2021</option>
+                <option value="3">March 2021</option>
+                <option value="4">April 2021</option>
+                <option value="5">May 2021</option>
+                <option value="6">June 2021</option>
+            </select>
+            <br>
+            <ul class="list-group">
+                <?php while ($row = mysqli_fetch_assoc($submittedReports)) : ?>
+                    <li class="list-group-item">
+                        <strong>Report For: <?= $row['title'] ?></strong><br>
+                        <strong>Awarded Stars: <?= (int)$row['stars'] * (int)$row['multiplier'] ?></strong><br>
+                    </li>
+                <?php endwhile; ?>
+            </ul>
+            <br>
+        <?php endif; ?>
+        <p class="text-center"><b>Disclaimer: Any false/irrelevant/unparliamentary data/information fed will lead to
+                strict actions being taken against the respective clubs/members, that may lead to BAN and/or REMOVAl of
+                the
+                involved clubs/members. </b><br><br></p>
+
+              
+
+              </section>
+            </div>
+
+
+            <script>
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var currentMonth = url.searchParams.get("month");
+
+    const month = document.querySelector("#month");
+    month.value = currentMonth;
+    month.addEventListener('change', () => {
+        window.location.href = `./admin-reportings.php?month=${month.value}`
+    })
+
+    $("input[type='submit']").click(function(e) {
+        var $fileUpload = $("input[type='file']");
+        if (parseInt($fileUpload.get(0).files.length) > 3) {
+            alert("You can only upload a maximum of 3 files");
+            e.preventDefault();
+            // window.location.href = "./activity-reporting.php";
+        }
+    });
+
+    $('#form').on('submit', (e) => {
+        let r = confirm("Are you sure you want to submit? Once submitted it can't be altered!");
+        if (!r) {
+            e.preventDefault()
+        }
+    })
+</script>
+<script>
+    const reports = document.querySelectorAll(".add-report");
+
+    reports.forEach(report => {
+        let r = report.querySelector('.multiple-check');
+        let c = report.querySelector('.check-box');
+        if (r) {
+            r.addEventListener('keyup', () => {
+                if (r.value == '') {
+                    r.value = 1;
+                }
+                c.value = c.value.split('*')[0] + "*" + Number(r.value);
+            })
+            r.addEventListener('mouseup', () => {
+                if (r.value == '') {
+                    r.value = 1;
+                }
+                c.value = c.value.split('*')[0] + "*" + Number(r.value);
+            })
+        }
+    })
+</script>
+
+
+
+    <script src="../assets/js/app.min.js"></script>
+    <!-- JS Libraies -->
+    <script src="../assets/bundles/apexcharts/apexcharts.min.js"></script>
+    <script src="../assets/bundles/chocolat/dist/js/jquery.chocolat.min.js"></script>
+  <script src="../assets/bundles/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Page Specific JS File -->
+    <script src="../assets/js/page/index.js"></script>
+    <!-- Template JS File -->
+    <script src="../assets/js/scripts.js"></script>
+    <!-- Custom JS File -->
+    <script src="../assets/js/custom.js"></script>
+
+</body>
+
+</html>

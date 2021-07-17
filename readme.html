@@ -1,0 +1,229 @@
+<pre>
+API documentation
+
+Login:
+    Fields => id, password
+    Checks => whether the id is present in 'users' table, the match the encrypted(BLOWFISH) password
+    Method => POST, url: https://lions3234d2.com/api.php
+    API Call => submit the form with a field 'login':'true'
+    Response => details:[array with member details], error:'success' or 'error', type:'user' or 'invalid'
+    
+User Verify:
+    Fields => id, regionName, zoneName, firstName, middleName, lastName, address1, address2, city, state, postalCode, email, phone, spouseName, dob, gender, occupation
+    Checks => middleName, spouseName are optional
+    Method => POST, url: https://lions3234d2.com/api.php
+    API Call => submit the form with a field 'update-profile':'true'
+    Response => status:'error' or 'success'
+
+Add event:
+    Fields => eventTitle, amount, chiefGuest, venue, date(optional), description, eventType, authorId, clubId, image[]
+    Checks => check image extension, and only allow the following: 'jpg', 'png', 'jpeg', 'gif', 'tif'
+    Method => POST, url: https://lions3234d2.com/api.php
+    API Call => submit the form with a field 'add-event':'true'
+    Response => status: 'error' or 'success', imgError: [files with invalid extension]'
+    Note: Images are compressed automatically and stored in 'images' table with category: 'news' or 'events' or 'activities' and categoryId as foreign keys
+
+Add activity:
+    Fields => activityTitle, amount, city, date(optional), cabinetOfficers, description, lionHours, mediaCoverage, peopleServed, activityType, activitySubType, activityCategory, place, authorId, clubId, image[]
+    Checks => check image extension, and only allow the following: 'jpg', 'png', 'jpeg', 'gif', 'tif'
+    Method => POST, url: https://lions3234d2.com/api.php
+    API Call => submit the form with a field 'add-activity':'true'
+    Response => status: 'error' or 'success', imgError: [files with invalid extension]'
+    Note: Images are compressed automatically and stored in 'images' table with category: 'news' or 'events' or 'activities' and categoryId as foreign keys
+
+Add news:
+    Fields => newsTitle, date(optional), description, newsPaperLink, authorId, clubId, image[]
+    Checks => check image extension, and only allow the following: 'jpg', 'png', 'jpeg', 'gif', 'tif'
+    Method => POST, url: https://lions3234d2.com/api.php
+    API Call => submit the form with a field 'add-news':'true'
+    Response => status: 'error' or 'success', imgError: [files with invalid extension]'
+    Note: Images are compressed automatically and stored in 'images' table with category: 'news' or 'events' or 'activities' and categoryId as foreign keys
+
+Get events:
+    Fields => category:'events', view:'true'
+    Method => GET, https://lions3234d2.com/api.php?category=events&view=true
+    API Call => Get request with 'category':'events', 'view':'true'
+    Response => [Events], since the response contains all the data of the event, the array can also be used to display a single event
+
+Get news:
+    Fields => category:'news', view:'true'
+    Method => GET, https://lions3234d2.com/api.php?category=news&view=true
+    API Call => Get request with 'category':'news', 'view':'true'
+    Response => [News], since the response contains all the data of the event, the array can also be used to display a single news
+
+Get activities:
+    Fields => category:'activities', view:'true'
+    Method => GET, https://lions3234d2.com/api.php?category=activities&view=true
+    API Call => Get request with 'category':'activities', 'view':'true'
+    Response => [Activities], since the response contains all the data of the event, the array can also be used to display a single Activity
+
+Get events Single:
+    Fields => category:'events', view:'true', id=(eventId)
+    Method => GET, https://lions3234d2.com/api.php?category=events&view=true&id=(eventId)
+    API Call => Get request with 'category':'events', 'view':'true', 'id':(eventId)
+    Response => {Event}, since the response contains all the data of the event
+
+Get news Single:
+    Fields => category:'news', view:'true', id=(eventId)
+    Method => GET, https://lions3234d2.com/api.php?category=news&view=true&id=(eventId)
+    API Call => Get request with 'category':'news', 'view':'true', 'id':(newsId)
+    Response => {News}, since the response contains all the data of the event
+
+Get activities Single:
+    Fields => category:'activities', view:'true', id=(eventId)
+    Method => GET, https://lions3234d2.com/api.php?category=activities&view=true&id=(eventId)
+    API Call => Get request with 'category':'activities', 'view':'true', 'id':(activityId)
+    Response => {Activities}, since the response contains all the data of the event
+
+Delete events:
+    Fields => category:'events', id, delete:'true'
+    Method => GET, https://lions3234d2.com/api.php?category=events&id=(eventId)&delete=true
+    API Call => Get request with 'category':'events', id:(eventId),delete:'true'
+    Response => status:'error' or 'success'
+
+Delete activities:
+    Fields => category:'activities', id, delete:'true'
+    Method => GET, https://lions3234d2.com/api.php?category=activities&id=(activityId)&delete=true
+    API Call => Get request with 'category':'activities', id:(activityId),delete:'true'
+    Response => status:'error' or 'success'
+
+Delete news:
+    Fields => category:'news', id, delete:'true'
+    Method => GET, https://lions3234d2.com/api.php?category=news&id=(newsId)&delete=true
+    API Call => Get request with 'category':'news', id:(newsId),delete:'true'
+    Response => status:'error' or 'success'
+
+Get images:
+    Fields => type:'image', category:'all' or 'events' or 'activities' or 'news'
+    Method => GET,  https://lions3234d2.com/api.php?type=images&category=(category)
+    API Call => Get request with type:'images', category:'all' or 'events' or 'activities' or 'news'
+    Response => [images]
+
+Get clubs:
+    Fields => type:'clubs', category:'all' or (clubId)
+    Method => GET,  https://lions3234d2.com/api.php?type=clubs&category=(clubId)
+    API Call => Get request with type:'clubs', category:'all' or (clubId)
+    Response => [[memberId], clubDetails]
+
+Add Contact-Us:
+    Fields => query, name, number, email, message
+    Method => POSt,  https://lions3234d2.com/api.php
+    API Call => Submit the form with 'contact-us':'true'
+    Response => {status:'error' or 'success'}
+
+Get Contact-Us:
+    Fields => type:'contact', category:'all'
+    Method => GET,  https://lions3234d2.com/api.php?type=contact&category=all
+    API Call => Get request with type:'contact', category:'all'
+    Response => [Contact-Us]
+
+Get Activity Type:
+    Fields => get-type: true
+    Method: GET, https://lions3234d2.com/api.php?get-type=true
+    API Call => https://lions3234d2.com/api.php?get-type=true
+    Response => [activityType]
+    
+Get Activity Sub Type:
+    Fields => get-subtype: (activityType)
+    Method: GET, https://lions3234d2.com/api.php?get-subtype=(activityType)
+    API Call => https://lions3234d2.com/api.php?get-subtype=(activityType)
+    Response => [sub-type]
+    
+Get Activity Category:
+    Fields => get-category: (activitySubType)
+    Method: GET, https://lions3234d2.com/api.php?get-category=(activitySubType)
+    API Call => https://lions3234d2.com/api.php?get-category=(activitySubType)
+    Response => [category]
+    
+    
+Verify News:
+    Fields => verify-news: 'true', newsId
+    Method => GET, https://lions3234d2.com/api.php?verify-news=true&newsId=(newsID)
+    API Call => https://lions3234d2.com/api.php?verify-news=true&newsId=(newsId)
+    Response => status:'error' or 'success'
+    
+Get Business Directory:
+    Fields => business-directory: true, page=(pageNumber)
+    Method: Get, https://lions3234d2.com/api.php?business-directory=true&page=(pageNumber)
+    API Call => https://lions3234d2.com/api.php?business-directory=true&page=(pageNumber)
+    Response => [members, count]
+    
+Get Member Directory:
+    Fields => member-directory: true, page=(pageNumber)
+    Method: Get, https://lions3234d2.com/api.php?member-directory=true&page=(pageNumber)
+    API Call => https://lions3234d2.com/api.php?member-directory=true&page=(pageNumber)
+    Response => [members, count]
+    
+Change Password:
+    Fields => id, cpass, npass1, npass2
+    Method => POST, https://lions3234d2.com/api.php
+    API Call => Submit the form with 'change-password':'true'
+    Response => status:'error' or 'success'
+    
+Get Reports:
+    Fields => get-reports, month
+    Method => GET, https://lions3234d2.com/api.php?month=(month)&get-reports=true
+    API Call => Submit the form with 'get-reports':'true'
+    Response => [reports]
+    
+Get Submitted Reports:
+    Fields => get-submitted-reports, month, clubId
+    Method => GET, https://lions3234d2.com/api.php?month=(month)&clubId=(clubId)&get-submitted-reports=true
+    API Call => Submit the form with 'get-submitted-reports':'true'
+    Response => [submittedReports]
+    
+ADMIN REPORT IS TOO COMPLICATED TO DOCUMENT!!
+
+Check If Report Updated:
+    Fields => check-if-updated: true, month, clubId
+    Method => GET, https://lions3234d2.com/api.php?month=(month)&clubId=(clubId)&check-if-updated=true
+    API Call => https://lions3234d2.com/api.php?month=(month)&clubId=(clubId)&check-if-updated=true
+
+Search Member Directory:
+    Fields => search-member-directory: true, search, column, page
+    Method => GET, https://lions3234d2.com/api.php?search=(searchWord)&column=(columnToBeSearched)&page=(pageNumber)&search-member-directory=true
+    API Call => https://lions3234d2.com/api.php?search=(searchWord)&column=(columnToBeSearched)&page=(pageNumber)&search-member-directory=true
+    Response => [members, count]
+    
+Search Business Directory:
+    Fields => search-business-directory: true, search, column, page
+    Method => GET, https://lions3234d2.com/api.php?search=(searchWord)&column=(columnToBeSearched)&page=(pageNumber)&search-business-directory=true
+    API Call => https://lions3234d2.com/api.php?search=(searchWord)&column=(columnToBeSearched)&page=(pageNumber)&search-business-directory=true
+    Response => [members, count]
+    
+Check if powerful:
+    Fields => is-powerful: true, title
+    Method => GET, https://lions3234d2.com/api.php?title=(title)&is-powerful=true
+    Response => power: true | false
+    
+Get Slider Images:
+    Fields => slider-img
+    Method => GET, https://lions3234d2.com/api.php?slider-img=true
+    Response => [SliderImagePath]
+    Suggestion => trim the first 5 letters or replace it with https://lions3234d2.com/
+    
+Get Unverified News:
+    Fields => unverified-news, clubId
+    Method => GET, https://lions3234d2.com/api.php?clubId=(clubId)&unverified-news=true
+    Response => [News]
+    
+Check if zone-cp:
+    Fields => is-zone-cp: true, title
+    Method => GET, https://lions3234d2.com/api.php?title=(title)&is-zone-cp=true
+    Response => zone-cp: true | false
+    
+Check if region-cp:
+    Fields => is-region-cp: true, title
+    Method => GET, https://lions3234d2.com/api.php?title=(title)&is-region-cp=true
+    Response => is-region-cp: true | false
+    
+Get zone info:
+    Fields => get-zone-info: true, id: (user ID)
+    Method => GET, https://lions3234d2.com/api.php?get-zone-info=true&id=(userID)
+    Response => [{clubName, clubId, stars, activityStar, last-updated, activityCount, month-1, month-2, month-3, month-4, month-5, month-6, month-7, month-8, month-9, month-10, month-11, month-12}]
+
+Get region info:
+    Fields => get-region-info: true, id: (user ID)
+    Method => GET, https://lions3234d2.com/api.php?get-region-info=true&id=(userID)
+    Response => [{clubName, clubId, stars, zoneName, activityStar, last-updated, activityCount, month-1, month-2, month-3, month-4, month-5, month-6, month-7, month-8, month-9, month-10, month-11, month-12}]
+</pre>

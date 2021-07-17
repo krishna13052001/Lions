@@ -1,0 +1,78 @@
+header {
+  .fixed-top {
+    box-shadow: 0 0.1rem 0.3rem rgba($color: #000000, $alpha: 0.5);
+    background: whitesmoke !important;
+    .img-logo {
+      width: 4rem;
+      height: 4rem;
+    }
+    .nav-link {
+      text-transform: capitalize !important;
+      color: #111 !important;
+    }
+  }
+  .dropdown-item {
+    color: #111 !important;
+  }
+}
+footer {
+  background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.9),
+      rgba(0, 0, 0, 0.9)
+    ),
+    url("./../img/bg7.jpg") no-repeat center center/cover;
+  background-attachment: fixed;
+  padding: 2rem;
+  color: whitesmoke;
+  img {
+    display: block;
+    margin: auto;
+    height: 7rem;
+    width: 7rem;
+    border-radius: 50%;
+  }
+  .list-item {
+    list-style: none !important;
+  }
+  hr {
+    height: 1px;
+    border: none;
+    background: #084f9d;
+  }
+}
+section.members {
+  padding-top: 7rem;
+}
+
+.btn {
+  display: block;
+  margin: auto;
+}
+
+.tiles {
+  padding: 1rem 2rem;
+  .tile {
+    padding: 1rem;
+    a {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
+      padding: 2rem;
+      width: 80%;
+      height: 80%;
+      color: dodgerblue;
+      text-decoration: none;
+      box-shadow: 0 0.1rem 0.3rem rgba($color: #000000, $alpha: 0.5);
+      &:hover {
+        background: dodgerblue;
+        color: whitesmoke;
+      }
+    }
+    font-weight: bolder;
+    margin: 1rem auto;
+  }
+}

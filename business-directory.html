@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php
+    include './meta.php';
+    ?>
+    <title>Members | 3234D2</title>
+
+
+</head>
+<body>
+    <?php include './includes/header.php' ?>
+
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="links/select2/select2.min.css">
+  	<link rel="stylesheet" type="text/css" href="links/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" type="text/css" href="links/css/util.css">
+  <link rel="stylesheet" type="text/css" href="links/css/busi.css">
+  <!--===============================================================================================-->
+
+
+    <section id="intro" class="d-flex align-items-center"  style="background-image:url(img/indexbg7.jpg)">
+        <div class="container">
+          <h1 class="animated">Member Directory
+          </h1>
+
+        </div>
+      </section>
+
+
+	<div class="limiter">
+
+		<div class="container-table100">
+			<div class="ser">
+			<input type="text" name="" id="myInput" placeholder="Enter the id to search " onkeyup="searchfun()">
+			</div>
+			<div class="wrap-table100">
+				<div class="table100">
+					<table id="myTable">
+						<thead>
+							<tr class="table100-head">
+								<th class="column1">ID</th>
+								<th class="column2">Title</th>
+								<th class="column3">First Name</th>
+								<th class="column4">Last Name</th>
+								<th class="column5">Club Name</th>
+								<th class="column6">Email Id</th>
+								<th class="column7">Phone</th>
+                                <th class="column8">Occupation</th>
+							</tr>
+						</thead>
+						<tbody>
+								<tr>
+									<td class="column1">69</td>
+									<td class="column2">Club President-Club Administrator</td>
+									<td class="column3">Ritam</td>
+									<td class="column4">Banerjee</td>
+									<td class="column5">himym</td>
+									<td class="column6">ritambalco@gmail.com</td>
+									<td class="column7">9034390303</td>
+                                    <td class="column8">Business</td>
+								</tr>
+								 <tr>
+									<td class="column1">7</td>
+									<td class="column2">Club President-Club Administrator</td>
+									<td class="column3">Ritam</td>
+									<td class="column4">Banerjee</td>
+									<td class="column5">DEOLALI NASIK ROAD L C</td>
+									<td class="column6">kumu110055@gmail.com</td>
+									<td class="column7">2020-09-18</td>
+                                    <td class="column8">Business</td>
+								</tr>
+								<tr>
+									<td class="column1">169111</td>
+									<td class="column2">Club President-Club Administrator</td>
+									<td class="column3">Ritam</td>
+									<td class="column4">Banerjee</td>
+									<td class="column5">DEOLALI NASIK ROAD L C</td>
+									<td class="column6">kumu110055@gmail.com</td>
+									<td class="column7">2020-09-18</td>
+                                    <td class="column8">Business</td>
+								</tr>
+
+								<tr>
+									<td class="column1">169111</td>
+									<td class="column2">Club President-Club Administrator</td>
+									<td class="column3">Ritam</td>
+									<td class="column4">Banerjee</td>
+									<td class="column5">DEOLALI NASIK ROAD L C</td>
+									<td class="column6">kumu110055@gmail.com</td>
+									<td class="column7">2020-09-18</td>
+                                    <td class="column8">Business</td>
+								</tr>
+
+								<tr>
+									<td class="column1">169111</td>
+									<td class="column2">Club President-Club Administrator</td>
+									<td class="column3">Ritam</td>
+									<td class="column4">Banerjee</td>
+									<td class="column5">DEOLALI NASIK ROAD L C</td>
+									<td class="column6">kumu110055@gmail.com</td>
+									<td class="column7">2020-09-18</td>
+                                    <td class="column8">Business</td>
+								</tr>
+
+								<tr>
+									<td class="column1">169111</td>
+									<td class="column2">Club President-Club Administrator</td>
+									<td class="column3">Ritam</td>
+									<td class="column4">Banerjee</td>
+									<td class="column5">DEOLALI NASIK ROAD L C</td>
+									<td class="column6">kumu110055@gmail.com</td>
+									<td class="column7">2020-09-18</td>
+                                    <td class="column8">Business</td>
+								</tr>
+
+								<tr>
+									<td class="column1">169111</td>
+									<td class="column2">Club President-Club Administrator</td>
+									<td class="column3">Ritam</td>
+									<td class="column4">Banerjee</td>
+									<td class="column5">DEOLALI NASIK ROAD L C</td>
+									<td class="column6">kumu110055@gmail.com</td>
+									<td class="column7">2020-09-18</td>
+                                    <td class="column8">Business</td>
+								</tr>
+
+								<tr>
+									<td class="column1">169111</td>
+									<td class="column2">Club President-Club Administrator</td>
+									<td class="column3">Ritam</td>
+									<td class="column4">Banerjee</td>
+									<td class="column5">DEOLALI NASIK ROAD L C</td>
+									<td class="column6">kumu110055@gmail.com</td>
+									<td class="column7">2020-09-18</td>
+                                    <td class="column8">Business</td>
+								</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+        <div class="pagination p1 justify-content-center">
+			<ul>
+			  <a href="#"><li><</li></a>
+			  <a class="is-active" href="#"><li>1</li></a>
+			  <a href="#"><li>2</li></a>
+			  <a href="#"><li>3</li></a>
+        <a href="#"><li>4</li></a>
+			  <a href="#"><li>5</li></a>
+			  <a href="#"><li>6</li></a>
+			  <a href="#"><li>></li></a>
+    	</ul>
+		  </div>
+    	</div>
+
+
+ 	<script>
+		const searchfun = () =>{
+			let filter = document.getElementById('myInput').value.toUpperCase();
+			let myTable  = document.getElementById('myTable');
+			 let tr = myTable.getElementsByTagName('tr');
+
+			 for(var i = 0 ; i<tr.length; i++){
+				 let td = tr[i].getElementsByTagName('td')[0];
+
+				 if(td){
+					 let textvalue = td.textContent || td.innerHTML;
+					 if (textvalue.toUpperCase().indexOf(filter) > -1){
+						 tr[i].style.display = "";
+					 }
+					 else{
+						 tr[i].style.display = "none";
+					 }
+				 }
+
+
+                }
+		}
+
+(function ($) {
+    "use strict";
+
+
+
+
+})(jQuery)
+	</script>
+
+  <script src="links/select2/select2.min.js"></script>
+
+    <?php include './includes/footer.php' ?>
+
+</body>
+</html>
