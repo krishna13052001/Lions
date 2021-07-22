@@ -16,6 +16,8 @@ if (!isset($_SESSION['id'])) {
 
     $subtype = $con->query("SELECT DISTINCT `sub-type` FROM `activitytype`");
     $subtype = $subtype->fetch_all(MYSQLI_ASSOC);
+    // echo $subtype;
+    
 
     $activityCategory = $con->query("SELECT DISTINCT `category` FROM `activitytype`");
     $activityCategory = $activityCategory->fetch_all(MYSQLI_ASSOC);
@@ -176,7 +178,7 @@ if (!isset($_SESSION['id'])) {
 </head>
 
 
-<?php //include './header.php' 
+<?php include './header.php' 
 ?>
 
 <body class="light light-sidebar theme-light">
@@ -323,10 +325,9 @@ if (!isset($_SESSION['id'])) {
                                         <select name="activitySubType" id="activitySubType" class="form-control" required>
                                             <option value="other" disabled selected>Select Activity Sub Type
                                             </option>
-                                            <!-- <?php foreach ($subtype as $subtype) : ?>
+                                            <?php foreach ($subtype as $subtype) : ?>
                                                 <option value="<?= $subtype['type'] ?>"><?= $subtype['sub-type'] ?></option>
-                                            <?php endforeach; ?> -->
-
+                                            <?php endforeach; ?> 
                                         </select>
                                     </div>
 
@@ -334,7 +335,7 @@ if (!isset($_SESSION['id'])) {
                                         <select name="activityCategory" id="activityCategory" class="form-control" required>
                                             <option value="other" disabled selected>Select Activity Category
                                             </option>
-                                            <!-- <?php foreach ($activityCategory as $category) : ?>
+                                           <?php foreach ($activityCategory as $category) : ?>
                                                 <option value="<?= $category['category'] ?>"><?= $category['category'] ?></option>
                                             <?php endforeach; ?>
  -->

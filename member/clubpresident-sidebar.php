@@ -6,7 +6,7 @@
                     </div>
                     <ul class="sidebar-menu">
                         <li class="menu-header">Club President</li>
-                        <li class="dropdown active">
+                        <li class="dropdown">
                             <a href="./home.php" class="nav-link"><i class="fas fa-desktop"></i><span>Dashboard</span></a>
                         </li>
                         <li class="dropdown">
